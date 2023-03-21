@@ -1,14 +1,15 @@
 import { cartI, requestParamI } from "../types";
+import Config from "./config";
 
 // Request for all catys
 const getAllCartsRequest = async (setCarts: React.Dispatch<React.SetStateAction<cartI[] | undefined>>, setError: React.Dispatch<React.SetStateAction<string | undefined>>, setRequestParam: React.Dispatch<React.SetStateAction<requestParamI>>, page: number = 0) => {
-    const skip = page*20;
+    const skip = page*Config.apiRequestLimit;
 
-    fetch(`https://dummyjson.com/carts?skip=${skip}`)
+    fetch(`https://dummyjson.com/carts?skip=${skip}&limit=${Config.apiRequestLimit}`)
       .then((res) =>res.json())
       .then((result) => {
         const buff = [];
-        for(let i=0; i<(result.total / result.limit); i++ )
+        for(let i=0; i<Math.ceil(result.total / Config.apiRequestLimit); i++ )
         {
             buff.push(i+1);
         }
@@ -19,9 +20,9 @@ const getAllCartsRequest = async (setCarts: React.Dispatch<React.SetStateAction<
             pages: buff
         }
         if(result.skip >= 0 && result.total >= 0 && result.limit >= 0)
-        setRequestParam(param);
+        {setRequestParam(param);
         setError(undefined);
-        setCarts(result.carts);
+        setCarts(result.carts);}
       })
       .catch((err) => {
         if (err) setError('Carts API request fail!');
