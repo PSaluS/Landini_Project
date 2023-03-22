@@ -4,6 +4,7 @@ import GlobalStyle from './style/globalStyle';
 import Theme from './style/theme';
 import { cartI } from './types';
 import AllCartsView from './views/AllCartsView';
+import DetailView from './views/DetailView';
 
 function App() {
   const [carts, setCarts] = useState<undefined | cartI[]>();
@@ -14,7 +15,7 @@ function App() {
       {!select ? (
         <AllCartsView carts={carts} setCarts={setCarts} setSelect={setSelect} />
       ) : (
-        <button onClick={() => setSelect(undefined)}>Back</button>
+        <DetailView setSelect={setSelect} select={select} />
       )}
     </ThemeProvider>
   );

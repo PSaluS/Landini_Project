@@ -7,6 +7,7 @@ const FlexCartsDiv = styled.div`
   max-width: 1000px;
   margin: auto;
   max-height: 850px;
+  height: 100vh;
   justify-content: space-evenly;
   overflow-y: auto;
   box-sizing: border-box;

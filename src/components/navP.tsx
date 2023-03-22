@@ -8,7 +8,10 @@ const NavP = styled.p<NavPI>`
   font-weight: 600;
   font-size: 20px;
   padding: 10px;
-  -webkit-text-stroke: 1px black;
+  ${(props) =>
+    !props.here
+      ? `-webkit-text-stroke: 1px black;`
+      : `-webkit-text-stroke: 0px black; `}
   color: ${(props) =>
     props.here
       ? (props) => props.theme.mainBlue
