@@ -1,7 +1,6 @@
 import { cartI, requestParamI } from "../types";
 import Config from "./config";
 
-// Request for all catys
 const getAllCartsRequest = async (setCarts: React.Dispatch<React.SetStateAction<cartI[] | undefined>>, setError: React.Dispatch<React.SetStateAction<string | undefined>>, setRequestParam: React.Dispatch<React.SetStateAction<requestParamI>>, page: number = 0) => {
     const skip = page*Config.apiRequestLimit;
 
@@ -24,9 +23,9 @@ const getAllCartsRequest = async (setCarts: React.Dispatch<React.SetStateAction<
         setError(undefined);
         setCarts(result.carts);}
       })
-      .catch((err) => {
-        if (err) setError('Carts API request fail!');
-      });
+      .catch(() =>
+        setError('Carts API request fail!')
+      );
       return [1,2,3];
 }
 

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import AddCart from '../API/addCart';
 import getAllCartsRequest from '../API/getAllCarts';
 import AddButton from '../components/atoms/buttons/addButton';
-import DetailButton from '../components/atoms/buttons/detailButton';
-import RemoveButton from '../components/atoms/buttons/removeButton';
-import CartDiv from '../components/cart';
-import FlexCartsDiv from '../components/flexCartsDiv';
-import NavP from '../components/navP';
+import FlexCartsDiv from '../components/atoms/carts/flexCartsDiv';
+import Cart from '../components/molecules/cart/cart';
+import CartsNav from '../components/molecules/cartsNav/cartsNav';
+import ErrorMess from '../components/molecules/errorMess/errorMess';
 import { cartI, requestParamI } from '../types';
 
 interface allCartsViewI {
@@ -14,12 +13,6 @@ interface allCartsViewI {
   setCarts: React.Dispatch<React.SetStateAction<cartI[] | undefined>>;
   setSelect: React.Dispatch<React.SetStateAction<cartI | undefined>>;
 }
-
-const NavRaw = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
 
 const requestParamInit = {
   skip: 0,
@@ -34,58 +27,36 @@ const AllCartsView = ({ carts, setCarts, setSelect }: allCartsViewI) => {
   const [requestParam, setRequestParam] =
     useState<requestParamI>(requestParamInit);
 
+  const addLocalCart = (cart: cartI) => {
+    if (carts) setCarts([...carts, cart]);
+  };
+
   useEffect(() => {
     getAllCartsRequest(setCarts, setApiError, setRequestParam, page);
   }, [page, setCarts]);
 
   return (
     <>
+      {apiError ? <ErrorMess mess={apiError} setError={setApiError} /> : null}
       <FlexCartsDiv>
         {carts === undefined && apiError === undefined ? (
           <p>Loading...</p>
         ) : null}
-        {carts !== undefined && !apiError && carts.length > 0 ? (
-          carts.map((element) => (
-            <CartDiv key={element.id}>
-              Cart: {element.id}
-              <DetailButton onClick={() => setSelect(element)}>
-                Details
-              </DetailButton>
-              <RemoveButton
-                onClick={() =>
-                  setCarts(carts.filter((cart) => cart.id !== element.id))
-                }
-              >
-                Remove Cart
-              </RemoveButton>
-            </CartDiv>
-          ))
-        ) : (
-          <p>{apiError}</p>
-        )}
-        {/* <AddButton>Add Cart +</AddButton> */}
-        <NavRaw>
-          {requestParam && requestParam.pages.length > 1
-            ? requestParam.pages.map((element) => {
-                if (element - 1 === page)
-                  return (
-                    <div key={`navPages: ${element}`}>
-                      <NavP here>{element}</NavP>
-                    </div>
-                  );
-                else
-                  return (
-                    <div
-                      key={`navPages: ${element}`}
-                      onClick={() => setPage(element - 1)}
-                    >
-                      <NavP>{element}</NavP>
-                    </div>
-                  );
-              })
-            : null}
-        </NavRaw>
-        <AddButton>Add Cart +</AddButton>
+        {carts !== undefined && !apiError && carts.length > 0
+          ? carts.map((element) => (
+              <Cart
+                element={element}
+                carts={carts}
+                setCarts={setCarts}
+                setSelect={setSelect}
+                setApiError={setApiError}
+              />
+            ))
+          : null}
+        <CartsNav requestParam={requestParam} page={page} setPage={setPage} />
+        <AddButton onClick={() => AddCart(setApiError, addLocalCart)}>
+          Add Cart +
+        </AddButton>
       </FlexCartsDiv>
     </>
   );
