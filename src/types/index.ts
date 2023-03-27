@@ -24,3 +24,10 @@ export interface cartI {
     limit: number;
     pages: number[];
   }
+
+  export interface requestParamInitI {
+    skip: number;
+    total: number;
+    limit: number;
+    pages: never[];
+}

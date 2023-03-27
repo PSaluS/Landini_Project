@@ -26,7 +26,6 @@ const getAllCartsRequest = async (setCarts: React.Dispatch<React.SetStateAction<
       .catch(() =>
         setError('Carts API request fail!')
       );
-      return [1,2,3];
 }
 
 export default getAllCartsRequest;

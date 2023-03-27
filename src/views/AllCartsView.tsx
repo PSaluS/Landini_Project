@@ -42,9 +42,10 @@ const AllCartsView = ({ carts, setCarts, setSelect }: allCartsViewI) => {
         {carts === undefined && apiError === undefined ? (
           <p>Loading...</p>
         ) : null}
-        {carts !== undefined && !apiError && carts.length > 0
+        {carts !== undefined
           ? carts.map((element) => (
               <Cart
+                key={`cart${element.id}`}
                 element={element}
                 carts={carts}
                 setCarts={setCarts}
